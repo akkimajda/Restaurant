@@ -66,3 +66,8 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+@import "tailwindcss";
+/* petits réglages globaux (facultatif) */
+html, body, #root { height: 100%; }
+body { @apply bg-neutral-950 text-neutral-100 antialiased; }
+a { @apply text-red-500 hover:opacity-80; }

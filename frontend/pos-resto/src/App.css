@@ -1,3 +1,4 @@
+@import "tailwindcss";
 #root {
   max-width: 1280px;
   margin: 0 auto;
@@ -39,4 +40,77 @@
 
 .read-the-docs {
   color: #888;
+}
+
+/* grille des produits */
+.productGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 14px;
+}
+
+/* card produit */
+.productCard {
+  border-radius: 16px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  overflow: hidden;
+  text-align: left;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.productCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(0,0,0,.06);
+}
+
+/* image + badge prix */
+.imgWrap {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+}
+.imgWrap img {
+  width: 100%; height: 100%;
+  object-fit: cover; display: block;
+  transition: transform .3s ease;
+}
+.productCard:hover .imgWrap img { transform: scale(1.04); }
+
+.badgePrice {
+  position: absolute; right: 8px; bottom: 8px;
+  background: rgba(255,255,255,.92); backdrop-filter: blur(6px);
+  padding: 6px 10px; border-radius: 999px; font-weight: 600; font-size: 13px;
+  border: 1px solid #e5e7eb;
+}
+
+/* infos */
+.info { padding: 10px 12px 12px; }
+.title { font-weight: 600; }
+.desc { font-size: 12px; color: #6b7280; margin-top: 2px; line-height: 1.3; }
+
+/* catégories “pills” */
+.categoryBar {
+  display: flex; gap: 10px; overflow: auto;
+  padding: 8px 2px 4px; scrollbar-width: none;
+}
+.categoryBar::-webkit-scrollbar { display: none; }
+
+.chip {
+  border: 1px solid #e5e7eb; background: #fff; border-radius: 999px;
+  padding: 7px 12px; font-weight: 500; transition: all .15s ease;
+}
+.chip:hover { background: #f8fafc; }
+.chip.active { background: #111827; color: #fff; border-color: #111827; }
+
+/* barre outils (recherche) */
+.toolbar {
+  display: flex; gap: 12px; align-items: center; margin: 8px 0 12px;
+}
+.searchInput {
+  flex: 1; border: 1px solid #e5e7eb; border-radius: 12px;
+  padding: 10px 12px; font-size: 14px; outline: none;
+}
+.searchInput:focus {
+  border-color: #111827;
+  box-shadow: 0 0 0 3px rgba(17,24,39,.08);
 }

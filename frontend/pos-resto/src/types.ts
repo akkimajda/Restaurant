@@ -5,15 +5,18 @@ export interface Category {
   name: string;
 }
 
-export interface Product {
+export type Product = {
   id: string;
   name: string;
   price: number;
   categoryId: string;
-  img?: string;
-}
+  image?: string;        // <-- nouveau
+  description?: string;  // <-- nouveau
+};
+
 
 export interface CartLine {
   product: Product;
   qty: number;
 }
+
