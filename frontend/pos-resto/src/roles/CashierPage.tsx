@@ -11,7 +11,7 @@ import type { CartLine, OrderType, Product } from '../types';
 export default function CashierPage() {
   const { stationId } = useActiveStation();
 
-  // Auth infos (en-tête)
+  // Infos auth (entête)
   const [email, setEmail] = useState<string>('');
   const [role, setRole] = useState<string>('manager');
 
@@ -30,19 +30,31 @@ export default function CashierPage() {
     })();
   }, []);
 
-  // Menu (BDD + mocks)
+  // Menu (BDD + mocks via hook unifié)
   const { categories, items, loading, error } = useMenu();
 
   // État UI
   const [orderType, setOrderType] = useState<OrderType>('onplace');
   const [categoryId, setCategoryId] = useState<string>('all');
+  const [query, setQuery] = useState<string>('');          // recherche
   const [cart, setCart] = useState<CartLine[]>([]);
 
-  // Filtrage produits
+  // Filtrage produits (catégorie + recherche)
   const visibleProducts = useMemo(() => {
-    if (categoryId === 'all') return items;
-    return items.filter((p) => p.categoryId === categoryId);
-  }, [items, categoryId]);
+    const base =
+      categoryId === 'all'
+        ? items
+        : items.filter((p) => p.categoryId === categoryId);
+
+    const q = query.trim().toLowerCase();
+    if (!q) return base;
+
+    return base.filter(
+      (p) =>
+        p.name.toLowerCase().includes(q) ||
+        (p.description ?? '').toLowerCase().includes(q),
+    );
+  }, [items, categoryId, query]);
 
   // Actions panier
   const addToCart = (p: Product) => {
@@ -97,17 +109,32 @@ export default function CashierPage() {
             minHeight: 'calc(100vh - 140px)',
           }}
         >
-          {/* Colonne gauche : type + catégories + produits */}
+          {/* Colonne gauche : type + recherche + catégories + produits */}
           <div style={{ display: 'flex', flexDirection: 'column' }}>
             <OrderTypeTabs value={orderType} onChange={setOrderType} />
 
-            <div style={{ marginTop: 12 }}>
-              <CategoryBar
-                categories={categories}
-                value={categoryId}
-                onChange={setCategoryId}
+            {/* Recherche */}
+            <div style={{ display: 'flex', gap: 12, margin: '12px 0' }}>
+              <input
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Rechercher un produit…"
+                aria-label="Rechercher un produit"
+                style={{
+                  flex: 1,
+                  padding: '10px 12px',
+                  border: '1px solid #e5e7eb',
+                  borderRadius: 10,
+                  outline: 'none',
+                }}
               />
             </div>
+
+            <CategoryBar
+              categories={categories}
+              value={categoryId}
+              onChange={setCategoryId}
+            />
 
             <div style={{ flex: 1, overflow: 'auto' }}>
               <ProductGrid products={visibleProducts} onAdd={addToCart} />
