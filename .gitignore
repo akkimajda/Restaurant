@@ -1,0 +1,14 @@
+# Node / Vite (tous niveaux)
+**/node_modules/
+**/dist/
+**/.vite/
+*.log
+
+# Environnements (ne jamais pousser tes secrets)
+.env
+.env.*
+frontend/pos-resto/.env
+
+# Autres
+.DS_Store
+coverage/
