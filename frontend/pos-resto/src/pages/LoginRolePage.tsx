@@ -23,32 +23,29 @@ export default function LoginRolePage() {
   };
 
   const submitPin = async () => {
-    setErr("");
-    if (pin.length < 4) { setErr("PIN trop court"); return; }
-    setLoading(true);
-    try {
-      const { data, error } = await supabase.rpc("verify_staff_pin", {
-        p_role: role,
-        p_pin: pin,
-      });
+  setErr("");
+  if (pin.length < 4) { setErr("PIN trop court"); return; }
+  setLoading(true);
+  try {
+    const { data, error } = await supabase.rpc("verify_staff_pin", {
+      p_role: role,
+      p_pin: pin,
+    });
 
-      if (error) {
-        setErr(error.message);
-        return;
-      }
-      if (!data || data.length === 0) {
-        setErr("Code invalide pour ce rôle.");
-        return;
-      }
+    if (error) { setErr(error.message); return; }
+    if (!data || data.length === 0) { setErr("Code invalide pour ce rôle."); return; }
 
-      // ✅ Succès : redirection selon le rôle
-      if (role === "manager") navigate("/manager");
-      else if (role === "cashier") navigate("/cashier");
-      else navigate("/server");
-    } finally {
-      setLoading(false);
-    }
-  };
+    // ✅ Mémoriser le rôle en session
+    sessionStorage.setItem('pos_role', role!);
+
+    // Redirection selon le rôle
+    if (role === "manager") navigate("/manager");
+    else if (role === "cashier") navigate("/cashier");
+    else navigate("/server");
+  } finally {
+    setLoading(false);
+  }
+};
 
   const submitQR = () => {
     // On branchera l’auth QR ensuite
